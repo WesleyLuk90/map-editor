@@ -32,6 +32,15 @@ export class View {
             newScale
         );
     }
+
+    nearestImagePixel(point: Point) {
+        const delta = point.sub(this.point).scale(1 / this.scale);
+        return new Point(Math.round(delta.x), Math.round(delta.y));
+    }
+
+    pixelToDisplay(point: Point) {
+        return this.point.add(point.scale(this.scale));
+    }
 }
 
 export function Editor({ file }: { file: File | null }) {
