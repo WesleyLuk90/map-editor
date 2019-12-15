@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { Grid } from "./Grid";
+import { ImageDisplay } from "./ImageDisplay";
 
 export class Point {
     constructor(readonly x: number, readonly y: number) {}
@@ -65,15 +67,8 @@ export function Editor({ file }: { file: File | null }) {
     return (
         <div className="editor">
             <svg className="svg" onWheel={onWheel} ref={svg}>
-                {url && (
-                    <g transform={`translate(${view.point.x} ${view.point.y})`}>
-                        <image
-                            href={url}
-                            imageRendering="optimizeSpeed"
-                            transform={`scale(${view.scale})`}
-                        />
-                    </g>
-                )}
+                {url && <ImageDisplay url={url} view={view} />}
+                <Grid view={view} />
             </svg>
         </div>
     );
