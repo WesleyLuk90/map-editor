@@ -27,12 +27,19 @@ export function Controls({
         <div className="controls">
             <input type="file" ref={ref} onChange={handleSelect} />
             <div>
-                <p>
-                    Point 1: {point1.x} {point1.y}
-                </p>
-                <p>
-                    Point 2: {point2.x} {point2.y}
-                </p>
+                <p>Point 1: {point1.toString(0)}</p>
+                <p>Point 2: {point2.toString(0)}</p>
+
+                {[19, 20, 21, 22].map(p => (
+                    <p key={p}>
+                        {p}:{" "}
+                        {point2
+                            .sub(point1)
+                            .abs()
+                            .mod(p)
+                            .toString()}
+                    </p>
+                ))}
             </div>
         </div>
     );

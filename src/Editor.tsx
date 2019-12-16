@@ -17,6 +17,18 @@ export class Point {
     scale(scale: number) {
         return new Point(this.x * scale, this.y * scale);
     }
+
+    mod(number: number) {
+        return new Point(this.x % number, this.y % number);
+    }
+
+    abs() {
+        return new Point(Math.abs(this.x), Math.abs(this.y));
+    }
+
+    toString(decimals: number = 2) {
+        return `(${this.x.toFixed(decimals)}, ${this.y.toFixed(decimals)})`;
+    }
 }
 
 export class View {
@@ -132,9 +144,7 @@ export function Editor({
     }
 
     function startPan(e: React.MouseEvent<SVGSVGElement>) {
-        if (e.target === svg.current) {
-            setPanning(new Point(e.clientX, e.clientY));
-        }
+        setPanning(new Point(e.clientX, e.clientY));
     }
 
     return (

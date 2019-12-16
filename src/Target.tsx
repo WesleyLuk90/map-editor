@@ -15,6 +15,7 @@ export function Target({
         .add(new Point(view.scale / 2, view.scale / 2));
 
     function down(e: React.MouseEvent<SVGGElement>) {
+        e.stopPropagation();
         e.preventDefault();
         onMouseDown();
     }
