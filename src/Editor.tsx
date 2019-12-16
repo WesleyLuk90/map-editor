@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Grid } from "./Grid";
 import { ImageDisplay } from "./ImageDisplay";
+import { Target } from "./Target";
 
 export class Point {
     constructor(readonly x: number, readonly y: number) {}
@@ -38,6 +39,11 @@ export class View {
         return new Point(Math.round(delta.x), Math.round(delta.y));
     }
 
+    containedImagePixel(point: Point) {
+        const delta = point.sub(this.point).scale(1 / this.scale);
+        return new Point(Math.floor(delta.x), Math.floor(delta.y));
+    }
+
     pixelToDisplay(point: Point) {
         return this.point.add(point.scale(this.scale));
     }
@@ -45,6 +51,8 @@ export class View {
 
 export function Editor({ file }: { file: File | null }) {
     const [url, setUrl] = useState<string | null>(null);
+    const [point, setPoint] = useState(new Point(100, 100));
+    const [dragging, setDragging] = useState(false);
 
     useEffect(() => {
         if (file != null) {
@@ -61,23 +69,54 @@ export function Editor({ file }: { file: File | null }) {
     const svg = React.createRef<SVGSVGElement>();
     const [view, setView] = useState(new View(new Point(0, 0), 1));
 
-    function onWheel(e: React.WheelEvent<SVGElement>) {
-        if (svg.current != null) {
-            const rect = svg.current.getBoundingClientRect();
-            setView(
-                view.updateScale(
-                    e.deltaY / 100,
-                    new Point(e.clientX - rect.left, e.clientY - rect.top)
-                )
-            );
+    function getScreenPosition(e: React.MouseEvent<any>) {
+        if (svg.current == null) {
+            return null;
         }
+        const rect = svg.current.getBoundingClientRect();
+        return new Point(e.clientX - rect.left, e.clientY - rect.top);
+    }
+
+    function onWheel(e: React.WheelEvent<SVGElement>) {
+        const position = getScreenPosition(e);
+        if (position == null) {
+            return;
+        }
+        setView(view.updateScale(e.deltaY / 100, position));
+    }
+
+    function onMouseMove(e: React.MouseEvent<SVGSVGElement>) {
+        if (dragging) {
+            const position = getScreenPosition(e);
+            if (position == null) {
+                return;
+            }
+            setPoint(view.containedImagePixel(position));
+        }
+    }
+
+    function stopDrag() {
+        setDragging(false);
     }
 
     return (
         <div className="editor">
-            <svg className="svg" onWheel={onWheel} ref={svg}>
+            <svg
+                className="svg"
+                onWheel={onWheel}
+                ref={svg}
+                onMouseMove={onMouseMove}
+                onMouseUp={stopDrag}
+                onMouseLeave={stopDrag}
+                cursor={dragging ? "move" : undefined}
+            >
                 {url && <ImageDisplay url={url} view={view} />}
                 <Grid view={view} />
+                <Target
+                    position={point}
+                    view={view}
+                    onMouseDown={() => setDragging(true)}
+                />
             </svg>
         </div>
     );

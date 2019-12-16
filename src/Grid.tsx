@@ -13,6 +13,7 @@ export function Grid({ view }: { view: View }) {
         <g>
             {new Array(COUNT).fill(0).map((x, i) => (
                 <line
+                    key={i}
                     x1={start.x + i * view.scale}
                     y1={0}
                     x2={start.x + i * view.scale}
@@ -22,6 +23,7 @@ export function Grid({ view }: { view: View }) {
             ))}
             {new Array(COUNT).fill(0).map((x, i) => (
                 <line
+                    key={i}
                     x1={0}
                     y1={start.y + i * view.scale}
                     x2={2000}
