@@ -22,6 +22,10 @@ export class Point {
 export class View {
     constructor(readonly point: Point, readonly scale: number) {}
 
+    move(point: Point) {
+        return new View(this.point.add(point), this.scale);
+    }
+
     updateScale(delta: number, point: Point) {
         const newScale = this.scale * (1 - delta / 10);
         return new View(
@@ -49,10 +53,23 @@ export class View {
     }
 }
 
-export function Editor({ file }: { file: File | null }) {
+export function Editor({
+    file,
+    point1,
+    setPoint1,
+    point2,
+    setPoint2
+}: {
+    file: File | null;
+    point1: Point;
+    setPoint1: (p: Point) => void;
+    point2: Point;
+    setPoint2: (p: Point) => void;
+}) {
     const [url, setUrl] = useState<string | null>(null);
-    const [point, setPoint] = useState(new Point(100, 100));
-    const [dragging, setDragging] = useState(false);
+    const [dragging1, setDragging1] = useState(false);
+    const [dragging2, setDragging2] = useState(false);
+    const [pan, setPanning] = useState<Point | null>(null);
 
     useEffect(() => {
         if (file != null) {
@@ -86,17 +103,38 @@ export function Editor({ file }: { file: File | null }) {
     }
 
     function onMouseMove(e: React.MouseEvent<SVGSVGElement>) {
-        if (dragging) {
+        if (dragging1) {
             const position = getScreenPosition(e);
             if (position == null) {
                 return;
             }
-            setPoint(view.containedImagePixel(position));
+            setPoint1(view.containedImagePixel(position));
+        }
+        if (dragging2) {
+            const position = getScreenPosition(e);
+            if (position == null) {
+                return;
+            }
+            setPoint2(view.containedImagePixel(position));
+        }
+        if (pan) {
+            const newPoint = new Point(e.clientX, e.clientY);
+            const delta = new Point(e.clientX, e.clientY).sub(pan);
+            setView(view.move(delta));
+            setPanning(newPoint);
         }
     }
 
     function stopDrag() {
-        setDragging(false);
+        setDragging1(false);
+        setDragging2(false);
+        setPanning(null);
+    }
+
+    function startPan(e: React.MouseEvent<SVGSVGElement>) {
+        if (e.target === svg.current) {
+            setPanning(new Point(e.clientX, e.clientY));
+        }
     }
 
     return (
@@ -105,17 +143,23 @@ export function Editor({ file }: { file: File | null }) {
                 className="svg"
                 onWheel={onWheel}
                 ref={svg}
+                onMouseDown={startPan}
                 onMouseMove={onMouseMove}
                 onMouseUp={stopDrag}
                 onMouseLeave={stopDrag}
-                cursor={dragging ? "move" : undefined}
+                cursor={dragging1 || dragging2 ? "move" : undefined}
             >
                 {url && <ImageDisplay url={url} view={view} />}
                 <Grid view={view} />
                 <Target
-                    position={point}
+                    position={point1}
                     view={view}
-                    onMouseDown={() => setDragging(true)}
+                    onMouseDown={() => setDragging1(true)}
+                />
+                <Target
+                    position={point2}
+                    view={view}
+                    onMouseDown={() => setDragging2(true)}
                 />
             </svg>
         </div>
