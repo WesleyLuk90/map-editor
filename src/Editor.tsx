@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Grid } from "./Grid";
 import { ImageDisplay } from "./ImageDisplay";
+import { SquaresGrid } from "./SquaresGrid";
 import { Target } from "./Target";
 
 export class Point {
@@ -70,13 +71,15 @@ export function Editor({
     point1,
     setPoint1,
     point2,
-    setPoint2
+    setPoint2,
+    size
 }: {
     file: File | null;
     point1: Point;
     setPoint1: (p: Point) => void;
     point2: Point;
     setPoint2: (p: Point) => void;
+    size: number | null;
 }) {
     const [url, setUrl] = useState<string | null>(null);
     const [dragging1, setDragging1] = useState(false);
@@ -170,6 +173,12 @@ export function Editor({
                     position={point2}
                     view={view}
                     onMouseDown={() => setDragging2(true)}
+                />
+                <SquaresGrid
+                    point1={point1}
+                    point2={point2}
+                    view={view}
+                    size={size}
                 />
             </svg>
         </div>

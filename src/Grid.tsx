@@ -1,5 +1,6 @@
 import React from "react";
 import { Point, View } from "./Editor";
+import { range } from "./Util";
 
 const MIX_PIXEL_SIZE = 8;
 const COUNT = Math.ceil(2000 / MIX_PIXEL_SIZE);
@@ -11,7 +12,7 @@ export function Grid({ view }: { view: View }) {
     const start = view.pixelToDisplay(view.nearestImagePixel(new Point(0, 0)));
     return (
         <g>
-            {new Array(COUNT).fill(0).map((x, i) => (
+            {range(COUNT).map((x, i) => (
                 <line
                     key={i}
                     x1={start.x + i * view.scale}
@@ -21,7 +22,7 @@ export function Grid({ view }: { view: View }) {
                     stroke="rgb(200,200,200)"
                 />
             ))}
-            {new Array(COUNT).fill(0).map((x, i) => (
+            {range(COUNT).map((x, i) => (
                 <line
                     key={i}
                     x1={0}
