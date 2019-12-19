@@ -15,7 +15,8 @@ function App() {
     const [file, setFile] = useState<null | File>(null);
     const [point1, setPoint1] = useState(new Point(100, 100));
     const [point2, setPoint2] = useState(new Point(500, 500));
-    const [size, setSize] = useState<number | null>(null);
+    const [xCells, setXCells] = useState<number | null>(null);
+    const [yCells, setYCells] = useState<number | null>(null);
 
     return (
         <div className="App">
@@ -25,20 +26,23 @@ function App() {
                 point2={point2}
                 setPoint1={p => {
                     setPoint1(p);
-                    setSize(null);
+                    setXCells(null);
                 }}
                 setPoint2={p => {
                     setPoint2(p);
-                    setSize(null);
+                    setYCells(null);
                 }}
-                size={size}
+                xCells={xCells}
+                yCells={yCells}
             />
             <Controls
                 onSelect={setFile}
                 point1={point1}
                 point2={point2}
-                size={size}
-                setSize={setSize}
+                xCells={xCells}
+                yCells={yCells}
+                setXCells={setXCells}
+                setYCells={setYCells}
             />
         </div>
     );

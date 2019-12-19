@@ -8,19 +8,21 @@ export function SquaresGrid({
     point1,
     point2,
     view,
-    size
+    xCells,
+    yCells
 }: {
     point1: Point;
     point2: Point;
     view: View;
-    size: number | null;
+    xCells: number | null;
+    yCells: number | null;
 }) {
-    if (size == null) {
+    if (xCells == null || yCells == null) {
         return null;
     }
     const diff = point1.sub(point2).abs();
-    const width = (diff.x / Math.round(diff.x / size)) * view.scale;
-    const height = (diff.y / Math.round(diff.y / size)) * view.scale;
+    const width = (diff.x / xCells) * view.scale;
+    const height = (diff.y / yCells) * view.scale;
     const topLeft = view.pixelToDisplay(
         new Point(Math.min(point1.x, point2.x), Math.min(point1.y, point2.y))
     );

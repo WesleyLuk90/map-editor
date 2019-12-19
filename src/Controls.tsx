@@ -1,19 +1,22 @@
 import React from "react";
 import { Point } from "./Editor";
-import { range } from "./Util";
 
 export function Controls({
     onSelect,
     point1,
     point2,
-    size,
-    setSize
+    xCells,
+    setXCells,
+    yCells,
+    setYCells
 }: {
     onSelect: (file: File) => void;
     point1: Point;
     point2: Point;
-    size: number | null;
-    setSize: (size: number | null) => void;
+    xCells: number | null;
+    setXCells: (count: number | null) => void;
+    yCells: number | null;
+    setYCells: (count: number | null) => void;
 }) {
     const ref = React.createRef<HTMLInputElement>();
 
@@ -34,27 +37,28 @@ export function Controls({
             <div>
                 <p>Point 1: {point1.toString(0)}</p>
                 <p>Point 2: {point2.toString(0)}</p>
-
-                <label>
-                    None
-                    <input
-                        type="radio"
-                        checked={size == null}
-                        onClick={() => setSize(null)}
-                    />
-                </label>
-                {range(16, 26).map(i => (
-                    <div>
-                        <label>
-                            {i}
-                            <input
-                                type="radio"
-                                checked={size === i}
-                                onClick={() => setSize(i)}
-                            />
-                        </label>
-                    </div>
-                ))}
+                X:{" "}
+                <input
+                    type="number"
+                    value={xCells || ""}
+                    onChange={e => {
+                        const v = parseInt(e.target.value);
+                        if (v && v > 0) {
+                            setXCells(v);
+                        }
+                    }}
+                />
+                Y:{" "}
+                <input
+                    type="number"
+                    value={yCells || ""}
+                    onChange={e => {
+                        const v = parseInt(e.target.value);
+                        if (v && v > 0) {
+                            setYCells(v);
+                        }
+                    }}
+                />
             </div>
         </div>
     );
