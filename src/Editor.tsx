@@ -72,16 +72,18 @@ export function Editor({
     setPoint1,
     point2,
     setPoint2,
-    xCells,
-    yCells
+    cellCount,
+    startExtra,
+    endExtra
 }: {
     file: File | null;
     point1: Point;
     setPoint1: (p: Point) => void;
     point2: Point;
     setPoint2: (p: Point) => void;
-    xCells: number;
-    yCells: number;
+    cellCount: Point;
+    startExtra: Point;
+    endExtra: Point;
 }) {
     const [url, setUrl] = useState<string | null>(null);
     const [dragging1, setDragging1] = useState(false);
@@ -180,8 +182,9 @@ export function Editor({
                     point1={point1}
                     point2={point2}
                     view={view}
-                    xCells={xCells}
-                    yCells={yCells}
+                    cellCount={cellCount}
+                    startExtra={startExtra}
+                    endExtra={endExtra}
                 />
             </svg>
         </div>

@@ -8,25 +8,35 @@ export function SquaresGrid({
     point1,
     point2,
     view,
-    xCells,
-    yCells
+    cellCount,
+    startExtra,
+    endExtra
 }: {
     point1: Point;
     point2: Point;
     view: View;
-    xCells: number;
-    yCells: number;
+    cellCount: Point;
+    startExtra: Point;
+    endExtra: Point;
 }) {
     const diff = point1.sub(point2).abs();
-    const width = (diff.x / xCells) * view.scale;
-    const height = (diff.y / yCells) * view.scale;
+    const width = (diff.x / cellCount.x) * view.scale;
+    const height = (diff.y / cellCount.y) * view.scale;
     const topLeft = view.pixelToDisplay(
         new Point(Math.min(point1.x, point2.x), Math.min(point1.y, point2.y))
     );
+    const extraX = Math.floor(topLeft.x / width);
+    const extraY = Math.floor(topLeft.y / height);
     const start = new Point(
-        topLeft.x - Math.floor(topLeft.x / width) * width,
-        topLeft.y - Math.floor(topLeft.y / height) * height
+        topLeft.x - extraX * width,
+        topLeft.y - extraY * height
     );
+    function isXBorder(i: number) {
+        return i == extraX + startExtra.x;
+    }
+    function isYBorder(i: number) {
+        return i == extraY + startExtra.y;
+    }
     return (
         <g>
             {range(count).map(i => (
@@ -35,7 +45,7 @@ export function SquaresGrid({
                     x2={start.x + i * width}
                     y1={0}
                     y2={2000}
-                    stroke="black"
+                    stroke={isXBorder(i) ? "blue" : "black"}
                 ></line>
             ))}
             {range(count).map(i => (
@@ -44,7 +54,7 @@ export function SquaresGrid({
                     x2={2000}
                     y1={start.y + i * height}
                     y2={start.y + i * height}
-                    stroke="black"
+                    stroke={isYBorder(i) ? "blue" : "black"}
                 ></line>
             ))}
         </g>
