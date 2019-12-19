@@ -14,12 +14,9 @@ export function SquaresGrid({
     point1: Point;
     point2: Point;
     view: View;
-    xCells: number | null;
-    yCells: number | null;
+    xCells: number;
+    yCells: number;
 }) {
-    if (xCells == null || yCells == null) {
-        return null;
-    }
     const diff = point1.sub(point2).abs();
     const width = (diff.x / xCells) * view.scale;
     const height = (diff.y / yCells) * view.scale;

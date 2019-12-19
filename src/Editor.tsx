@@ -80,8 +80,8 @@ export function Editor({
     setPoint1: (p: Point) => void;
     point2: Point;
     setPoint2: (p: Point) => void;
-    xCells: number | null;
-    yCells: number | null;
+    xCells: number;
+    yCells: number;
 }) {
     const [url, setUrl] = useState<string | null>(null);
     const [dragging1, setDragging1] = useState(false);

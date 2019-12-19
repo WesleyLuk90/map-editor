@@ -13,10 +13,10 @@ export function Controls({
     onSelect: (file: File) => void;
     point1: Point;
     point2: Point;
-    xCells: number | null;
-    setXCells: (count: number | null) => void;
-    yCells: number | null;
-    setYCells: (count: number | null) => void;
+    xCells: number;
+    setXCells: (count: number) => void;
+    yCells: number;
+    setYCells: (count: number) => void;
 }) {
     const ref = React.createRef<HTMLInputElement>();
 

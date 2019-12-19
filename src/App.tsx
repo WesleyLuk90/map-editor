@@ -15,8 +15,14 @@ function App() {
     const [file, setFile] = useState<null | File>(null);
     const [point1, setPoint1] = useState(new Point(100, 100));
     const [point2, setPoint2] = useState(new Point(500, 500));
-    const [xCells, setXCells] = useState<number | null>(null);
-    const [yCells, setYCells] = useState<number | null>(null);
+    const [xCells, setXCells] = useState(20);
+    const [yCells, setYCells] = useState(20);
+
+    function update(p1: Point, p2: Point) {
+        const p = p1.sub(p2).abs();
+        setXCells(Math.round(p.x / 20));
+        setYCells(Math.round(p.y / 20));
+    }
 
     return (
         <div className="App">
@@ -26,11 +32,11 @@ function App() {
                 point2={point2}
                 setPoint1={p => {
                     setPoint1(p);
-                    setXCells(null);
+                    update(p, point2);
                 }}
                 setPoint2={p => {
                     setPoint2(p);
-                    setYCells(null);
+                    update(point1, p);
                 }}
                 xCells={xCells}
                 yCells={yCells}
