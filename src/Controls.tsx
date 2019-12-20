@@ -1,13 +1,38 @@
 import React from "react";
 import { Point } from "./Editor";
 
+function NumberInput({
+    value,
+    onChange
+}: {
+    value: number;
+    onChange: (e: number) => void;
+}) {
+    return (
+        <input
+            type="number"
+            value={value}
+            onChange={e => {
+                const number = parseInt(e.target.value);
+                if (!isNaN(number)) {
+                    onChange(number);
+                }
+            }}
+        />
+    );
+}
+
 export function Controls({
     onSelect,
     point1,
     point2,
     cellCount,
     setCellCount,
-    file
+    file,
+    startExtra,
+    endExtra,
+    setStartExtra,
+    setEndExtra
 }: {
     onSelect: (file: File) => void;
     point1: Point;
@@ -15,6 +40,10 @@ export function Controls({
     cellCount: Point;
     setCellCount: (point: Point) => void;
     file: File | null;
+    startExtra: Point;
+    endExtra: Point;
+    setStartExtra: (e: Point) => void;
+    setEndExtra: (e: Point) => void;
 }) {
     const ref = React.createRef<HTMLInputElement>();
 
@@ -70,28 +99,50 @@ export function Controls({
                 <p>Point 1: {point1.toString(0)}</p>
                 <p>Point 2: {point2.toString(0)}</p>
                 X:{" "}
-                <input
-                    type="number"
-                    value={cellCount.x || ""}
-                    onChange={e => {
-                        const v = parseInt(e.target.value);
-                        if (v && v > 0) {
-                            setCellCount(new Point(v, cellCount.y));
-                        }
-                    }}
+                <NumberInput
+                    value={cellCount.x}
+                    onChange={v => setCellCount(new Point(v, cellCount.y))}
                 />
                 Y:{" "}
-                <input
-                    type="number"
-                    value={cellCount.x || ""}
-                    onChange={e => {
-                        const v = parseInt(e.target.value);
-                        if (v && v > 0) {
-                            setCellCount(new Point(cellCount.x, v));
-                        }
-                    }}
+                <NumberInput
+                    value={cellCount.y}
+                    onChange={v => setCellCount(new Point(cellCount.x, v))}
                 />
                 <p>Output: {outputSize().toString(0)}</p>
+            </div>
+            <div>
+                <div>
+                    Top:
+                    <NumberInput
+                        value={startExtra.y}
+                        onChange={y =>
+                            setStartExtra(new Point(startExtra.x, y))
+                        }
+                    />
+                </div>
+                <div>
+                    Left:
+                    <NumberInput
+                        value={startExtra.x}
+                        onChange={x =>
+                            setStartExtra(new Point(x, startExtra.y))
+                        }
+                    />
+                </div>
+                <div>
+                    Bottom:
+                    <NumberInput
+                        value={endExtra.y}
+                        onChange={y => setEndExtra(new Point(endExtra.x, y))}
+                    />
+                </div>
+                <div>
+                    Right:
+                    <NumberInput
+                        value={endExtra.x}
+                        onChange={x => setEndExtra(new Point(x, endExtra.x))}
+                    />
+                </div>
             </div>
             <button onClick={render}>Render</button>
             <div style={{ width: "100%", height: "500px", overflow: "auto" }}>

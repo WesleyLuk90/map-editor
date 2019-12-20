@@ -49,6 +49,10 @@ function App() {
                 file={file}
                 cellCount={cellCount}
                 setCellCount={setCellCount}
+                startExtra={startExtra}
+                endExtra={endExtra}
+                setStartExtra={setStartExtra}
+                setEndExtra={setEndExtra}
             />
         </div>
     );

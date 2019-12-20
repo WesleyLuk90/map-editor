@@ -32,10 +32,16 @@ export function SquaresGrid({
         topLeft.y - extraY * height
     );
     function isXBorder(i: number) {
-        return i == extraX + startExtra.x;
+        return (
+            i === extraX + startExtra.x ||
+            i === extraX + endExtra.x + cellCount.x
+        );
     }
     function isYBorder(i: number) {
-        return i == extraY + startExtra.y;
+        return (
+            i === extraY + startExtra.y ||
+            i === extraY + endExtra.y + cellCount.y
+        );
     }
     return (
         <g>
