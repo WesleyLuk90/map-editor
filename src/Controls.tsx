@@ -79,16 +79,18 @@ export function Controls({
         const bitmap = await createImageBitmap(file);
         const diff = point1.sub(point2).abs();
         const outputCellSize = outputSize();
+        const xScale = diff.x / cellCount.x;
+        const yScale = diff.y / cellCount.y;
         ctx.drawImage(
             bitmap,
-            point1.x,
-            point1.y,
-            diff.x,
-            diff.y,
+            point1.x + startExtra.x * xScale,
+            point1.y + startExtra.y * yScale,
+            diff.x - startExtra.x * xScale + endExtra.x * xScale,
+            diff.y - startExtra.y * yScale + endExtra.y * yScale,
             0,
             0,
-            cellCount.x * outputCellSize.x,
-            cellCount.y * outputCellSize.y
+            (cellCount.x - startExtra.x + endExtra.x) * outputCellSize.x,
+            (cellCount.y - startExtra.y + endExtra.y) * outputCellSize.y
         );
     }
 
@@ -140,7 +142,7 @@ export function Controls({
                     Right:
                     <NumberInput
                         value={endExtra.x}
-                        onChange={x => setEndExtra(new Point(x, endExtra.x))}
+                        onChange={x => setEndExtra(new Point(x, endExtra.y))}
                     />
                 </div>
             </div>
