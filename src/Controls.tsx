@@ -1,5 +1,6 @@
 import React from "react";
 import { Point } from "./Editor";
+import { range } from "./Util";
 
 function NumberInput({
     value,
@@ -79,10 +80,8 @@ export function Controls({
         const sourceSize = diff
             .sub(startExtra.multiply(scale))
             .add(endExtra.multiply(scale));
-        const outSize = cellCount
-            .sub(startExtra)
-            .add(endExtra)
-            .multiply(outputCellSize);
+        const outCount = cellCount.sub(startExtra).add(endExtra);
+        const outSize = outCount.multiply(outputCellSize);
         canvas.current.width = outSize.x;
         canvas.current.height = outSize.y;
         const ctx = canvas.current.getContext("2d");
@@ -101,6 +100,18 @@ export function Controls({
             outSize.x,
             outSize.y
         );
+        range(outCount.x * 2).forEach(i => {
+            ctx.beginPath();
+            ctx.moveTo((i * outputCellSize.x) / 2, 0);
+            ctx.lineTo((i * outputCellSize.x) / 2, outSize.y);
+            ctx.stroke();
+        });
+        range(outCount.y * 2).forEach(i => {
+            ctx.beginPath();
+            ctx.moveTo(0, (i * outputCellSize.y) / 2);
+            ctx.lineTo(outSize.x, (i * outputCellSize.y) / 2);
+            ctx.stroke();
+        });
     }
 
     return (

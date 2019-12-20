@@ -21,7 +21,7 @@ function App() {
 
     function update(p1: Point, p2: Point) {
         const p = p1.sub(p2).abs();
-        setCellCount(new Point(Math.round(p.x / 20), Math.round(p.y / 20)));
+        setCellCount(new Point(Math.round(p.x / 22), Math.round(p.y / 22)));
     }
 
     return (
