@@ -27,6 +27,14 @@ export class Point {
         return new Point(Math.abs(this.x), Math.abs(this.y));
     }
 
+    multiply(point: Point) {
+        return new Point(this.x * point.x, this.y * point.y);
+    }
+
+    divide(point: Point) {
+        return new Point(this.x / point.x, this.y / point.y);
+    }
+
     toString(decimals: number = 2) {
         return `(${this.x.toFixed(decimals)}, ${this.y.toFixed(decimals)})`;
     }

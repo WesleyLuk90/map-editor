@@ -72,25 +72,34 @@ export function Controls({
         if (!file || !canvas.current) {
             return;
         }
+        const diff = point1.sub(point2).abs();
+        const outputCellSize = outputSize();
+        const scale = diff.divide(cellCount);
+        const source = point1.add(startExtra.multiply(scale));
+        const sourceSize = diff
+            .sub(startExtra.multiply(scale))
+            .add(endExtra.multiply(scale));
+        const outSize = cellCount
+            .sub(startExtra)
+            .add(endExtra)
+            .multiply(outputCellSize);
+        canvas.current.width = outSize.x;
+        canvas.current.height = outSize.y;
         const ctx = canvas.current.getContext("2d");
         if (ctx == null) {
             return;
         }
         const bitmap = await createImageBitmap(file);
-        const diff = point1.sub(point2).abs();
-        const outputCellSize = outputSize();
-        const xScale = diff.x / cellCount.x;
-        const yScale = diff.y / cellCount.y;
         ctx.drawImage(
             bitmap,
-            point1.x + startExtra.x * xScale,
-            point1.y + startExtra.y * yScale,
-            diff.x - startExtra.x * xScale + endExtra.x * xScale,
-            diff.y - startExtra.y * yScale + endExtra.y * yScale,
+            source.x,
+            source.y,
+            sourceSize.x,
+            sourceSize.y,
             0,
             0,
-            (cellCount.x - startExtra.x + endExtra.x) * outputCellSize.x,
-            (cellCount.y - startExtra.y + endExtra.y) * outputCellSize.y
+            outSize.x,
+            outSize.y
         );
     }
 
