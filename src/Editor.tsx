@@ -38,6 +38,14 @@ export class Point {
     toString(decimals: number = 2) {
         return `(${this.x.toFixed(decimals)}, ${this.y.toFixed(decimals)})`;
     }
+
+    floor() {
+        return new Point(Math.floor(this.x), Math.floor(this.y));
+    }
+
+    round() {
+        return new Point(Math.round(this.x), Math.round(this.y));
+    }
 }
 
 export class View {

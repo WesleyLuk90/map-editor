@@ -20,35 +20,30 @@ export function SquaresGrid({
     endExtra: Point;
 }) {
     const diff = point1.sub(point2).abs();
-    const width = (diff.x / cellCount.x) * view.scale;
-    const height = (diff.y / cellCount.y) * view.scale;
+    const squareSize = diff.divide(cellCount).scale(view.scale);
     const topLeft = view.pixelToDisplay(
         new Point(Math.min(point1.x, point2.x), Math.min(point1.y, point2.y))
     );
-    const extraX = Math.floor(topLeft.x / width);
-    const extraY = Math.floor(topLeft.y / height);
-    const start = new Point(
-        topLeft.x - extraX * width,
-        topLeft.y - extraY * height
-    );
+    const extra = topLeft.divide(squareSize).floor();
+    const start = topLeft.sub(extra.multiply(squareSize));
     function isXBorder(i: number) {
         return (
-            i === extraX + startExtra.x ||
-            i === extraX + endExtra.x + cellCount.x
+            i === extra.x + startExtra.x ||
+            i === extra.x + endExtra.x + cellCount.x
         );
     }
     function isYBorder(i: number) {
         return (
-            i === extraY + startExtra.y ||
-            i === extraY + endExtra.y + cellCount.y
+            i === extra.y + startExtra.y ||
+            i === extra.y + endExtra.y + cellCount.y
         );
     }
     return (
         <g>
             {range(count).map(i => (
                 <line
-                    x1={start.x + i * width}
-                    x2={start.x + i * width}
+                    x1={start.x + i * squareSize.x}
+                    x2={start.x + i * squareSize.x}
                     y1={0}
                     y2={2000}
                     stroke={isXBorder(i) ? "blue" : "black"}
@@ -58,8 +53,8 @@ export function SquaresGrid({
                 <line
                     x1={0}
                     x2={2000}
-                    y1={start.y + i * height}
-                    y2={start.y + i * height}
+                    y1={start.y + i * squareSize.y}
+                    y2={start.y + i * squareSize.y}
                     stroke={isYBorder(i) ? "blue" : "black"}
                 ></line>
             ))}
