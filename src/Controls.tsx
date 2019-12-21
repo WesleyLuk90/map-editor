@@ -69,6 +69,8 @@ export function Controls({
         );
     }
 
+    const outCount = cellCount.sub(startExtra).add(endExtra);
+
     async function render() {
         if (!file || !canvas.current) {
             return;
@@ -80,7 +82,6 @@ export function Controls({
         const sourceSize = diff
             .sub(startExtra.multiply(scale))
             .add(endExtra.multiply(scale));
-        const outCount = cellCount.sub(startExtra).add(endExtra);
         const outSize = outCount.multiply(outputCellSize);
         canvas.current.width = outSize.x;
         canvas.current.height = outSize.y;
@@ -130,7 +131,8 @@ export function Controls({
                     value={cellCount.y}
                     onChange={v => setCellCount(new Point(cellCount.x, v))}
                 />
-                <p>Output: {outputSize().toString(0)}</p>
+                <p>Square Size: {outputSize().toString(0)}</p>
+                <p>Output Grid Size: {outCount.scale(2).toString(0)}</p>
             </div>
             <div>
                 <div>
